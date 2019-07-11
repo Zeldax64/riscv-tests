@@ -17,6 +17,7 @@ extern volatile uint64_t fromhost;
 
 static uintptr_t syscall(uintptr_t which, uint64_t arg0, uint64_t arg1, uint64_t arg2)
 {
+  /*
   volatile uint64_t magic_mem[8] __attribute__((aligned(64)));
   magic_mem[0] = which;
   magic_mem[1] = arg0;
@@ -31,6 +32,7 @@ static uintptr_t syscall(uintptr_t which, uint64_t arg0, uint64_t arg1, uint64_t
 
   __sync_synchronize();
   return magic_mem[0];
+  */
 }
 
 #define NUM_COUNTERS 2
@@ -39,6 +41,7 @@ static char* counter_names[NUM_COUNTERS];
 
 void setStats(int enable)
 {
+  /*
   int i = 0;
 #define READ_CTR(name) do { \
     while (i >= NUM_COUNTERS) ; \
@@ -51,6 +54,7 @@ void setStats(int enable)
   READ_CTR(minstret);
 
 #undef READ_CTR
+*/
 }
 
 void __attribute__((noreturn)) tohost_exit(uintptr_t code)
@@ -76,7 +80,7 @@ void abort()
 
 void printstr(const char* s)
 {
-  syscall(SYS_write, 1, (uintptr_t)s, strlen(s));
+  //syscall(SYS_write, 1, (uintptr_t)s, strlen(s));
 }
 
 void __attribute__((weak)) thread_entry(int cid, int nc)
@@ -112,6 +116,7 @@ void _init(int cid, int nc)
   // only single-threaded programs should ever get here.
   int ret = main(0, 0);
 
+/*
   char buf[NUM_COUNTERS * 32] __attribute__((aligned(64)));
   char* pbuf = buf;
   for (int i = 0; i < NUM_COUNTERS; i++)
@@ -119,13 +124,14 @@ void _init(int cid, int nc)
       pbuf += sprintf(pbuf, "%s = %d\n", counter_names[i], counters[i]);
   if (pbuf != buf)
     printstr(buf);
-
+*/
   exit(ret);
 }
 
 #undef putchar
 int putchar(int ch)
 {
+  /*
   static __thread char buf[64] __attribute__((aligned(64)));
   static __thread int buflen = 0;
 
@@ -136,12 +142,13 @@ int putchar(int ch)
     syscall(SYS_write, 1, (uintptr_t)buf, buflen);
     buflen = 0;
   }
-
+  */
   return 0;
 }
 
 void printhex(uint64_t x)
 {
+  /*
   char str[17];
   int i;
   for (i = 0; i < 16; i++)
@@ -152,11 +159,13 @@ void printhex(uint64_t x)
   str[16] = 0;
 
   printstr(str);
+  */
 }
 
 static inline void printnum(void (*putch)(int, void**), void **putdat,
                     unsigned long long num, unsigned base, int width, int padc)
 {
+  /*
   unsigned digs[sizeof(num)*CHAR_BIT];
   int pos = 0;
 
@@ -167,12 +176,13 @@ static inline void printnum(void (*putch)(int, void**), void **putdat,
       break;
     num /= base;
   }
-
+d
   while (width-- > pos)
     putch(padc, putdat);
 
   while (pos-- > 0)
     putch(digs[pos] + (digs[pos] >= 10 ? 'a' - 10 : '0'), putdat);
+*/
 }
 
 static unsigned long long getuint(va_list *ap, int lflag)
@@ -348,12 +358,14 @@ static void vprintfmt(void (*putch)(int, void**), void **putdat, const char *fmt
 
 int printf(const char* fmt, ...)
 {
+  /*
   va_list ap;
   va_start(ap, fmt);
 
   vprintfmt((void*)putchar, 0, fmt, ap);
 
   va_end(ap);
+  */
   return 0; // incorrect return value, but who cares, anyway?
 }
 
