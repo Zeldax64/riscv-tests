@@ -1,3 +1,18 @@
+// See LICENSE for license details.
+
+//**************************************************************************
+// Contrast adjustment benchmark
+//--------------------------------------------------------------------------
+// Authors  : Caio Vieira, Jorge Reis
+//
+// This benchmarks performs a histogram strecthing in a image
+// represented by a matrix and writes the results to a result
+// matrix. The input (and reference data) should be generated
+// using the contrast_gendata.py python script and dumped to
+// a file named dataset.h. Be aware that the image must have
+// IMG_WIDTH*IMG_HEIGHT%4=0 dimesions due to use of veirify()
+// function in "utils.h". A image of Lena is used as dataset.
+
 //--------------------------------------------------------------------------
 // Includes 
 
@@ -33,23 +48,11 @@ void thread_entry(int cid, int nc)
 {	
 	static data_t results_data[IMG_HEIGHT][IMG_WIDTH];
 	
-	contrast(cid, nc, IMG_HEIGHT,IMG_WIDTH,xMAX, xMIN, input1_data, results_data);
-	printf("PASSOU!\n");
+	contrast(cid, nc, IMG_HEIGHT,IMG_WIDTH, xMAX, xMIN, input1_data, results_data);
 
-#ifdef PC
-	int res = verify(IMG_HEIGHT*IMG_WIDTH/4, (int*)results_data, (int*)verify_data);
-	
-	if(res) {
-		printf("Vish! %d\n",res);
-	}
-	else
-		printf("DEU BOM\n");
-#else
 	barrier(nc);
 
 	int res = verify(IMG_HEIGHT*IMG_WIDTH/4, (int*)results_data, (int*)verify_data);
 
-	exit(res);
-#endif
-	
+	exit(res);	
 }
