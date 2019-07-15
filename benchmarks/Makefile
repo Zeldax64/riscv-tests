@@ -19,6 +19,7 @@ instbasedir = $(UCB_VLSI_HOME)/install
 
 bmarks = \
 	mt-contrast \
+	mt-conv2d \
 #	median \
 #	qsort \
 #	rsort \
