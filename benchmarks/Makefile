@@ -18,6 +18,7 @@ instbasedir = $(UCB_VLSI_HOME)/install
 #--------------------------------------------------------------------
 
 bmarks = \
+	mt-conv-gauss \
 	mt-contrast \
 	mt-conv2d \
 #	median \
@@ -45,7 +46,7 @@ RISCV_LINK_OPTS ?= -static -nostdlib -nostartfiles -lm -lgcc -T $(src_dir)/commo
 RISCV_OBJDUMP ?= $(RISCV_PREFIX)objdump --disassemble-all --disassemble-zeroes --section=.text --section=.text.startup --section=.data
 RISCV_SIM ?= spike --isa=rv$(XLEN)gc
 
-RISCV_ARCH = rv32ima
+RISCV_ARCH = rv32ia
 RISCV_ABI = ilp32
 
 incs  += -I$(src_dir)/../env -I$(src_dir)/common $(addprefix -I$(src_dir)/, $(bmarks))
